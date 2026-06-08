@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Globe, Zap, Bell, Check } from "lucide-react";
+import { Zap, Bell } from "lucide-react";
 
 /**
  * Design Philosophy: Cosmic Luxury
@@ -60,11 +60,11 @@ export default function Home() {
 
   const [language, setLanguage] = useState<Language>("en");
   const [isSpinning, setIsSpinning] = useState(false);
+  const [notified, setNotified] = useState(false);
 
   const t = translations[language];
 
   useEffect(() => {
-    // Calculate target date: World Cup 2026 starts on June 12, 2026
     const calculateCountdown = () => {
       const targetDate = new Date("2026-06-12T00:00:00").getTime();
       const now = new Date().getTime();
@@ -77,25 +77,26 @@ export default function Home() {
           minutes: Math.floor((difference / 1000 / 60) % 60),
           seconds: Math.floor((difference / 1000) % 60),
         });
+      } else {
+        setCountdown({ days: 0, hours: 0, minutes: 0, seconds: 0 });
       }
     };
 
     calculateCountdown();
     const interval = setInterval(calculateCountdown, 1000);
-
     return () => clearInterval(interval);
   }, []);
 
   const handleNotificationClick = () => {
     setIsSpinning(true);
 
-    // Request notification permission from browser
     if ("Notification" in window) {
       if (Notification.permission === "granted") {
         new Notification("World Cup 2026 Countdown", {
           body: "You will receive updates about the tournament!",
           icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%232E5BFF'/><text x='50' y='60' font-size='50' fill='white' text-anchor='middle' font-weight='bold'>⚽</text></svg>",
         });
+        setNotified(true);
       } else if (Notification.permission !== "denied") {
         Notification.requestPermission().then((permission) => {
           if (permission === "granted") {
@@ -103,41 +104,57 @@ export default function Home() {
               body: "You will receive updates about the tournament!",
               icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%232E5BFF'/><text x='50' y='60' font-size='50' fill='white' text-anchor='middle' font-weight='bold'>⚽</text></svg>",
             });
+            setNotified(true);
           }
         });
       }
     }
 
-    // Stop spinning after 2 seconds
-    setTimeout(() => {
-      setIsSpinning(false);
-    }, 2000);
+    setTimeout(() => setIsSpinning(false), 2000);
   };
 
   return (
     <div
-      className={`relative min-h-screen w-full overflow-hidden bg-black ${
+      className={`relative min-h-screen w-full overflow-hidden ${
         language === "ar" ? "rtl" : "ltr"
       }`}
+      style={{
+        background:
+          "radial-gradient(ellipse at 20% 50%, #1a1a4e 0%, #0d0d1a 40%, #000000 100%)",
+      }}
     >
-      {/* Video Background */}
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover"
-      >
-        <source src="/manus-storage/worldcup-bg-video_8b15b371.mp4" type="video/mp4" />
-      </video>
+      {/* Animated background orbs */}
+      <div
+        className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full opacity-20 animate-pulse"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(59,130,246,0.6) 0%, transparent 70%)",
+          filter: "blur(60px)",
+        }}
+      />
+      <div
+        className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full opacity-20"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(168,85,247,0.6) 0%, transparent 70%)",
+          filter: "blur(60px)",
+          animation: "float 8s ease-in-out infinite",
+        }}
+      />
+      <div
+        className="absolute top-3/4 left-1/2 w-64 h-64 rounded-full opacity-15"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(249,115,22,0.6) 0%, transparent 70%)",
+          filter: "blur(40px)",
+          animation: "float 6s ease-in-out infinite reverse",
+        }}
+      />
 
-      {/* Dark Overlay for better text readability */}
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
-
-      {/* Gradient Overlay - adds depth and premium feel */}
+      {/* Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60" />
 
-      {/* Language Toggle - Top Right */}
+      {/* Language Toggle */}
       <div className="absolute top-6 right-6 z-20 flex gap-2">
         <button
           onClick={() => setLanguage("en")}
@@ -163,9 +180,8 @@ export default function Home() {
 
       {/* Content Container */}
       <div className="relative z-10 min-h-screen w-full flex flex-col items-center justify-center px-4 py-8">
-        {/* Main Content */}
         <div className="max-w-4xl mx-auto text-center space-y-8">
-          {/* Tagline with Icon */}
+          {/* Tagline */}
           <div className="flex items-center justify-center gap-3 mb-6">
             <Zap className="w-5 h-5 text-blue-400 animate-pulse" />
             <span className="text-sm font-semibold tracking-widest text-blue-300 uppercase">
@@ -193,81 +209,72 @@ export default function Home() {
           {/* Countdown Timer */}
           <div className="pt-8 pb-4">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-              {/* Days */}
-              <div className="group">
-                <div className="relative">
-                  {/* Glow Effect */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-lg blur-xl group-hover:blur-2xl transition-all duration-300" />
-                  {/* Card */}
-                  <div className="relative bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-md border border-blue-500/30 rounded-lg p-6 md:p-8 hover:border-blue-400/60 transition-all duration-300">
-                    <div className="text-4xl md:text-5xl font-black text-blue-300 drop-shadow-lg">
-                      {String(countdown.days).padStart(2, "0")}
-                    </div>
-                    <div className="text-xs md:text-sm font-semibold text-blue-200/70 uppercase tracking-widest mt-2">
-                      {t.days}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Hours */}
-              <div className="group">
-                <div className="relative">
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-lg blur-xl group-hover:blur-2xl transition-all duration-300" />
-                  <div className="relative bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-md border border-purple-500/30 rounded-lg p-6 md:p-8 hover:border-purple-400/60 transition-all duration-300">
-                    <div className="text-4xl md:text-5xl font-black text-purple-300 drop-shadow-lg">
-                      {String(countdown.hours).padStart(2, "0")}
-                    </div>
-                    <div className="text-xs md:text-sm font-semibold text-purple-200/70 uppercase tracking-widest mt-2">
-                      {t.hours}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Minutes */}
-              <div className="group">
-                <div className="relative">
-                  <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-purple-500/20 rounded-lg blur-xl group-hover:blur-2xl transition-all duration-300" />
-                  <div className="relative bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-md border border-orange-500/30 rounded-lg p-6 md:p-8 hover:border-orange-400/60 transition-all duration-300">
-                    <div className="text-4xl md:text-5xl font-black text-orange-300 drop-shadow-lg">
-                      {String(countdown.minutes).padStart(2, "0")}
-                    </div>
-                    <div className="text-xs md:text-sm font-semibold text-orange-200/70 uppercase tracking-widest mt-2">
-                      {t.minutes}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Seconds */}
-              <div className="group">
-                <div className="relative">
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-orange-500/20 rounded-lg blur-xl group-hover:blur-2xl transition-all duration-300" />
-                  <div className="relative bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-md border border-blue-400/30 rounded-lg p-6 md:p-8 hover:border-blue-300/60 transition-all duration-300">
-                    <div className="text-4xl md:text-5xl font-black text-blue-200 drop-shadow-lg">
-                      {String(countdown.seconds).padStart(2, "0")}
-                    </div>
-                    <div className="text-xs md:text-sm font-semibold text-blue-200/70 uppercase tracking-widest mt-2">
-                      {t.seconds}
+              {[
+                { value: countdown.days, label: t.days, color: "blue" },
+                { value: countdown.hours, label: t.hours, color: "purple" },
+                { value: countdown.minutes, label: t.minutes, color: "orange" },
+                { value: countdown.seconds, label: t.seconds, color: "blue" },
+              ].map(({ value, label, color }) => (
+                <div key={label} className="group">
+                  <div className="relative">
+                    <div
+                      className={`absolute inset-0 rounded-lg blur-xl group-hover:blur-2xl transition-all duration-300`}
+                      style={{
+                        background:
+                          color === "blue"
+                            ? "linear-gradient(to right, rgba(59,130,246,0.2), rgba(168,85,247,0.2))"
+                            : color === "purple"
+                            ? "linear-gradient(to right, rgba(168,85,247,0.2), rgba(59,130,246,0.2))"
+                            : "linear-gradient(to right, rgba(249,115,22,0.2), rgba(168,85,247,0.2))",
+                      }}
+                    />
+                    <div
+                      className="relative backdrop-blur-md rounded-lg p-6 md:p-8 transition-all duration-300"
+                      style={{
+                        background:
+                          "linear-gradient(135deg, rgba(15,23,42,0.8), rgba(30,41,59,0.8))",
+                        border: `1px solid ${
+                          color === "blue"
+                            ? "rgba(59,130,246,0.3)"
+                            : color === "purple"
+                            ? "rgba(168,85,247,0.3)"
+                            : "rgba(249,115,22,0.3)"
+                        }`,
+                      }}
+                    >
+                      <div
+                        className={`text-4xl md:text-5xl font-black drop-shadow-lg`}
+                        style={{
+                          color:
+                            color === "blue"
+                              ? "#93c5fd"
+                              : color === "purple"
+                              ? "#d8b4fe"
+                              : "#fdba74",
+                        }}
+                      >
+                        {String(value).padStart(2, "0")}
+                      </div>
+                      <div className="text-xs md:text-sm font-semibold text-slate-400 uppercase tracking-widest mt-2">
+                        {label}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              ))}
             </div>
           </div>
 
-          {/* CTA Button - Notifications */}
+          {/* CTA Button */}
           <div className="pt-8">
             <button
               onClick={handleNotificationClick}
+              disabled={notified}
               className={`group relative px-8 md:px-12 py-3 md:py-4 text-base md:text-lg font-bold uppercase tracking-widest transition-all duration-300 ${
                 isSpinning ? "opacity-75" : ""
-              }`}
+              } ${notified ? "cursor-default" : ""}`}
             >
-              {/* Glow Background */}
               <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-orange-500 rounded-lg blur opacity-75 group-hover:opacity-100 transition duration-300 group-hover:blur-lg" />
-              {/* Button Content */}
               <div
                 className={`relative px-6 py-3 bg-black rounded-lg group-hover:bg-slate-900 transition-all duration-300 flex items-center justify-center gap-2 ${
                   isSpinning ? "animate-spin" : ""
@@ -282,7 +289,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Footer - Decorative */}
+        {/* Footer */}
         <div className="absolute bottom-8 left-0 right-0 flex justify-center gap-8 text-gray-400/40 text-sm">
           <span>{t.footer1}</span>
           <span>•</span>
@@ -290,25 +297,17 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Animated Particles Effect (subtle) */}
       <style>{`
         @keyframes float {
           0%, 100% { transform: translateY(0px); }
           50% { transform: translateY(-20px); }
         }
-        
         @keyframes glow-pulse {
           0%, 100% { opacity: 0.5; }
           50% { opacity: 1; }
         }
-        
-        .animate-float {
-          animation: float 6s ease-in-out infinite;
-        }
-        
-        .animate-glow-pulse {
-          animation: glow-pulse 3s ease-in-out infinite;
-        }
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        .animate-glow-pulse { animation: glow-pulse 3s ease-in-out infinite; }
       `}</style>
     </div>
   );
