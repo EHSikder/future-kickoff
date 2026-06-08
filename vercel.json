@@ -1,14 +1,10 @@
 {
-  "buildCommand": "npm run build",
+  "buildCommand": "pnpm run build",
   "outputDirectory": "dist/public",
-  "installCommand": "npm install",
-  "env": {
-    "NODE_ENV": "production"
-  },
+  "installCommand": "pnpm install",
+  "framework": null,
   "regions": ["sfo1"],
-  "functions": {
-    "server/index.ts": {
-      "runtime": "nodejs18.x"
-    }
-  }
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }
