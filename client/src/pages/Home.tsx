@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Globe, Zap } from "lucide-react";
+import { Globe, Zap, Bell, Check } from "lucide-react";
 
 /**
  * Design Philosophy: Cosmic Luxury
@@ -7,6 +7,7 @@ import { Globe, Zap } from "lucide-react";
  * - Futuristic, high-tech aesthetic with glow effects
  * - Premium, cinematic presentation
  * - Minimalist layout with maximum impact
+ * - Bilingual support: English & Arabic
  */
 
 interface CountdownState {
@@ -16,6 +17,41 @@ interface CountdownState {
   seconds: number;
 }
 
+type Language = "en" | "ar";
+
+const translations = {
+  en: {
+    tagline: "The Future Awaits",
+    heading1: "The Future is Closer",
+    heading2: "Than You Think",
+    subtitle:
+      "FIFA World Cup 2026 is almost here. Get ready to predict the matches of the most anticipated tournament of the decade.",
+    days: "Days",
+    hours: "Hours",
+    minutes: "Minutes",
+    seconds: "Seconds",
+    stayTuned: "Stay Tuned",
+    notificationsEnabled: "Notifications Enabled",
+    footer1: "FIFA World Cup 2026",
+    footer2: "June 12 - July 19",
+  },
+  ar: {
+    tagline: "المستقبل ينتظر",
+    heading1: "المستقبل أقرب",
+    heading2: "مما تعتقد",
+    subtitle:
+      "كأس العالم FIFA 2026 على الأبواب. استعد للتنبؤ بمباريات أكثر البطولات توقعاً في العقد.",
+    days: "أيام",
+    hours: "ساعات",
+    minutes: "دقائق",
+    seconds: "ثواني",
+    stayTuned: "ابق على تواصل",
+    notificationsEnabled: "تم تفعيل الإشعارات",
+    footer1: "كأس العالم FIFA 2026",
+    footer2: "12 يونيو - 19 يوليو",
+  },
+};
+
 export default function Home() {
   const [countdown, setCountdown] = useState<CountdownState>({
     days: 0,
@@ -24,11 +60,16 @@ export default function Home() {
     seconds: 0,
   });
 
+  const [language, setLanguage] = useState<Language>("en");
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+  const [showNotificationFeedback, setShowNotificationFeedback] =
+    useState(false);
+
+  const t = translations[language];
+
   useEffect(() => {
-    // Calculate target date: 20 minutes from deployment
-    // This will be set when the page loads
+    // Calculate target date: World Cup 2026 starts on June 12, 2026
     const calculateCountdown = () => {
-      // World Cup 2026 starts on June 12, 2026
       const targetDate = new Date("2026-06-12T00:00:00").getTime();
       const now = new Date().getTime();
       const difference = targetDate - now;
@@ -36,9 +77,7 @@ export default function Home() {
       if (difference > 0) {
         setCountdown({
           days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-          hours: Math.floor(
-            (difference / (1000 * 60 * 60)) % 24
-          ),
+          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
           minutes: Math.floor((difference / 1000 / 60) % 60),
           seconds: Math.floor((difference / 1000) % 60),
         });
@@ -51,8 +90,41 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
+  const handleNotificationClick = () => {
+    setNotificationsEnabled(true);
+    setShowNotificationFeedback(true);
+
+    // Request notification permission from browser
+    if ("Notification" in window) {
+      if (Notification.permission === "granted") {
+        new Notification("World Cup 2026 Countdown", {
+          body: "You will receive updates about the tournament!",
+          icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%232E5BFF'/><text x='50' y='60' font-size='50' fill='white' text-anchor='middle' font-weight='bold'>⚽</text></svg>",
+        });
+      } else if (Notification.permission !== "denied") {
+        Notification.requestPermission().then((permission) => {
+          if (permission === "granted") {
+            new Notification("World Cup 2026 Countdown", {
+              body: "You will receive updates about the tournament!",
+              icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%232E5BFF'/><text x='50' y='60' font-size='50' fill='white' text-anchor='middle' font-weight='bold'>⚽</text></svg>",
+            });
+          }
+        });
+      }
+    }
+
+    // Hide feedback after 3 seconds
+    setTimeout(() => {
+      setShowNotificationFeedback(false);
+    }, 3000);
+  };
+
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-black">
+    <div
+      className={`relative min-h-screen w-full overflow-hidden bg-black ${
+        language === "ar" ? "rtl" : "ltr"
+      }`}
+    >
       {/* Video Background */}
       <video
         autoPlay
@@ -70,6 +142,30 @@ export default function Home() {
       {/* Gradient Overlay - adds depth and premium feel */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60" />
 
+      {/* Language Toggle - Top Right */}
+      <div className="absolute top-6 right-6 z-20 flex gap-2">
+        <button
+          onClick={() => setLanguage("en")}
+          className={`px-4 py-2 rounded-lg font-semibold transition-all duration-300 ${
+            language === "en"
+              ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg shadow-blue-500/50"
+              : "bg-slate-800/60 text-gray-300 hover:bg-slate-700/60 border border-slate-600/30"
+          }`}
+        >
+          EN
+        </button>
+        <button
+          onClick={() => setLanguage("ar")}
+          className={`px-4 py-2 rounded-lg font-semibold transition-all duration-300 ${
+            language === "ar"
+              ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg shadow-blue-500/50"
+              : "bg-slate-800/60 text-gray-300 hover:bg-slate-700/60 border border-slate-600/30"
+          }`}
+        >
+          العربية
+        </button>
+      </div>
+
       {/* Content Container */}
       <div className="relative z-10 min-h-screen w-full flex flex-col items-center justify-center px-4 py-8">
         {/* Main Content */}
@@ -78,7 +174,7 @@ export default function Home() {
           <div className="flex items-center justify-center gap-3 mb-6">
             <Zap className="w-5 h-5 text-blue-400 animate-pulse" />
             <span className="text-sm font-semibold tracking-widest text-blue-300 uppercase">
-              The Future Awaits
+              {t.tagline}
             </span>
             <Zap className="w-5 h-5 text-purple-400 animate-pulse" />
           </div>
@@ -87,16 +183,16 @@ export default function Home() {
           <div className="space-y-4">
             <h1 className="text-5xl md:text-7xl font-black tracking-tighter leading-tight">
               <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-orange-400 bg-clip-text text-transparent drop-shadow-lg">
-                The Future is Closer
+                {t.heading1}
               </span>
               <br />
-              <span className="text-white drop-shadow-lg">Than You Think</span>
+              <span className="text-white drop-shadow-lg">{t.heading2}</span>
             </h1>
           </div>
 
           {/* Subtitle */}
           <p className="text-lg md:text-xl text-gray-200 font-light tracking-wide max-w-2xl mx-auto leading-relaxed">
-            FIFA World Cup 2026 is almost here. Get ready for the most anticipated tournament of the decade.
+            {t.subtitle}
           </p>
 
           {/* Countdown Timer */}
@@ -113,7 +209,7 @@ export default function Home() {
                       {String(countdown.days).padStart(2, "0")}
                     </div>
                     <div className="text-xs md:text-sm font-semibold text-blue-200/70 uppercase tracking-widest mt-2">
-                      Days
+                      {t.days}
                     </div>
                   </div>
                 </div>
@@ -128,7 +224,7 @@ export default function Home() {
                       {String(countdown.hours).padStart(2, "0")}
                     </div>
                     <div className="text-xs md:text-sm font-semibold text-purple-200/70 uppercase tracking-widest mt-2">
-                      Hours
+                      {t.hours}
                     </div>
                   </div>
                 </div>
@@ -143,7 +239,7 @@ export default function Home() {
                       {String(countdown.minutes).padStart(2, "0")}
                     </div>
                     <div className="text-xs md:text-sm font-semibold text-orange-200/70 uppercase tracking-widest mt-2">
-                      Minutes
+                      {t.minutes}
                     </div>
                   </div>
                 </div>
@@ -158,7 +254,7 @@ export default function Home() {
                       {String(countdown.seconds).padStart(2, "0")}
                     </div>
                     <div className="text-xs md:text-sm font-semibold text-blue-200/70 uppercase tracking-widest mt-2">
-                      Seconds
+                      {t.seconds}
                     </div>
                   </div>
                 </div>
@@ -166,27 +262,53 @@ export default function Home() {
             </div>
           </div>
 
-          {/* CTA Button */}
+          {/* CTA Button - Notifications */}
           <div className="pt-8">
-            <button className="group relative px-8 md:px-12 py-3 md:py-4 text-base md:text-lg font-bold uppercase tracking-widest">
+            <button
+              onClick={handleNotificationClick}
+              disabled={notificationsEnabled}
+              className="group relative px-8 md:px-12 py-3 md:py-4 text-base md:text-lg font-bold uppercase tracking-widest disabled:opacity-75 transition-opacity duration-300"
+            >
               {/* Glow Background */}
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-orange-500 rounded-lg blur opacity-75 group-hover:opacity-100 transition duration-300 group-hover:blur-lg" />
+              <div
+                className={`absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-orange-500 rounded-lg blur opacity-75 group-hover:opacity-100 transition duration-300 group-hover:blur-lg ${
+                  notificationsEnabled ? "opacity-50" : ""
+                }`}
+              />
               {/* Button Content */}
               <div className="relative px-6 py-3 bg-black rounded-lg group-hover:bg-slate-900 transition-colors duration-300 flex items-center justify-center gap-2">
-                <Globe className="w-5 h-5" />
-                <span className="bg-gradient-to-r from-blue-300 to-orange-300 bg-clip-text text-transparent">
-                  Stay Tuned
-                </span>
+                {notificationsEnabled ? (
+                  <>
+                    <Check className="w-5 h-5 text-green-400" />
+                    <span className="bg-gradient-to-r from-green-300 to-emerald-300 bg-clip-text text-transparent">
+                      {t.notificationsEnabled}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <Bell className="w-5 h-5" />
+                    <span className="bg-gradient-to-r from-blue-300 to-orange-300 bg-clip-text text-transparent">
+                      {t.stayTuned}
+                    </span>
+                  </>
+                )}
               </div>
             </button>
+
+            {/* Notification Feedback */}
+            {showNotificationFeedback && (
+              <div className="mt-4 text-center text-green-400 text-sm font-semibold animate-pulse">
+                ✓ {language === "en" ? "Notifications enabled!" : "تم تفعيل الإشعارات!"}
+              </div>
+            )}
           </div>
         </div>
 
         {/* Footer - Decorative */}
         <div className="absolute bottom-8 left-0 right-0 flex justify-center gap-8 text-gray-400/40 text-sm">
-          <span>FIFA World Cup 2026</span>
+          <span>{t.footer1}</span>
           <span>•</span>
-          <span>June 12 - July 12</span>
+          <span>{t.footer2}</span>
         </div>
       </div>
 
