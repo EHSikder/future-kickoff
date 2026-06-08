@@ -133,8 +133,7 @@ export default function Home() {
       {/* Dark Overlay for readability */}
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
 
-      {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60" />
+
 
       {/* Language Toggle */}
       <div className="absolute top-6 right-6 z-20 flex gap-2">
