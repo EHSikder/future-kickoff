@@ -31,7 +31,6 @@ const translations = {
     minutes: "Minutes",
     seconds: "Seconds",
     stayTuned: "Stay Tuned",
-    notificationsEnabled: "Notifications Enabled",
     footer1: "FIFA World Cup 2026",
     footer2: "June 12 - July 19",
   },
@@ -46,7 +45,6 @@ const translations = {
     minutes: "دقائق",
     seconds: "ثواني",
     stayTuned: "ابق على تواصل",
-    notificationsEnabled: "تم تفعيل الإشعارات",
     footer1: "كأس العالم FIFA 2026",
     footer2: "12 يونيو - 19 يوليو",
   },
@@ -61,9 +59,7 @@ export default function Home() {
   });
 
   const [language, setLanguage] = useState<Language>("en");
-  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
-  const [showNotificationFeedback, setShowNotificationFeedback] =
-    useState(false);
+  const [isSpinning, setIsSpinning] = useState(false);
 
   const t = translations[language];
 
@@ -91,8 +87,7 @@ export default function Home() {
   }, []);
 
   const handleNotificationClick = () => {
-    setNotificationsEnabled(true);
-    setShowNotificationFeedback(true);
+    setIsSpinning(true);
 
     // Request notification permission from browser
     if ("Notification" in window) {
@@ -113,10 +108,10 @@ export default function Home() {
       }
     }
 
-    // Hide feedback after 3 seconds
+    // Stop spinning after 2 seconds
     setTimeout(() => {
-      setShowNotificationFeedback(false);
-    }, 3000);
+      setIsSpinning(false);
+    }, 2000);
   };
 
   return (
@@ -266,41 +261,24 @@ export default function Home() {
           <div className="pt-8">
             <button
               onClick={handleNotificationClick}
-              disabled={notificationsEnabled}
-              className="group relative px-8 md:px-12 py-3 md:py-4 text-base md:text-lg font-bold uppercase tracking-widest disabled:opacity-75 transition-opacity duration-300"
+              className={`group relative px-8 md:px-12 py-3 md:py-4 text-base md:text-lg font-bold uppercase tracking-widest transition-all duration-300 ${
+                isSpinning ? "opacity-75" : ""
+              }`}
             >
               {/* Glow Background */}
-              <div
-                className={`absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-orange-500 rounded-lg blur opacity-75 group-hover:opacity-100 transition duration-300 group-hover:blur-lg ${
-                  notificationsEnabled ? "opacity-50" : ""
-                }`}
-              />
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-orange-500 rounded-lg blur opacity-75 group-hover:opacity-100 transition duration-300 group-hover:blur-lg" />
               {/* Button Content */}
-              <div className="relative px-6 py-3 bg-black rounded-lg group-hover:bg-slate-900 transition-colors duration-300 flex items-center justify-center gap-2">
-                {notificationsEnabled ? (
-                  <>
-                    <Check className="w-5 h-5 text-green-400" />
-                    <span className="bg-gradient-to-r from-green-300 to-emerald-300 bg-clip-text text-transparent">
-                      {t.notificationsEnabled}
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    <Bell className="w-5 h-5" />
-                    <span className="bg-gradient-to-r from-blue-300 to-orange-300 bg-clip-text text-transparent">
-                      {t.stayTuned}
-                    </span>
-                  </>
-                )}
+              <div
+                className={`relative px-6 py-3 bg-black rounded-lg group-hover:bg-slate-900 transition-all duration-300 flex items-center justify-center gap-2 ${
+                  isSpinning ? "animate-spin" : ""
+                }`}
+              >
+                <Bell className={`w-5 h-5 ${isSpinning ? "opacity-0" : ""}`} />
+                <span className="bg-gradient-to-r from-blue-300 to-orange-300 bg-clip-text text-transparent">
+                  {t.stayTuned}
+                </span>
               </div>
             </button>
-
-            {/* Notification Feedback */}
-            {showNotificationFeedback && (
-              <div className="mt-4 text-center text-green-400 text-sm font-semibold animate-pulse">
-                ✓ {language === "en" ? "Notifications enabled!" : "تم تفعيل الإشعارات!"}
-              </div>
-            )}
           </div>
         </div>
 
