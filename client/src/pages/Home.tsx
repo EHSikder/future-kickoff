@@ -25,7 +25,7 @@ const translations = {
     heading1: "The Future is Closer",
     heading2: "Than You Think",
     subtitle:
-      "FIFA World Cup 2026 is almost here. Get ready to predict the matches of the most anticipated tournament of the decade.",
+      "Fifa world cup 2026 is almost here. Get ready to predict and win. Stay Tuned",
     days: "Days",
     hours: "Hours",
     minutes: "Minutes",
