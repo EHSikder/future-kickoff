@@ -115,41 +115,23 @@ export default function Home() {
 
   return (
     <div
-      className={`relative min-h-screen w-full overflow-hidden ${
+      className={`relative min-h-screen w-full overflow-hidden bg-black ${
         language === "ar" ? "rtl" : "ltr"
       }`}
-      style={{
-        background:
-          "radial-gradient(ellipse at 20% 50%, #1a1a4e 0%, #0d0d1a 40%, #000000 100%)",
-      }}
     >
-      {/* Animated background orbs */}
-      <div
-        className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full opacity-20 animate-pulse"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(59,130,246,0.6) 0%, transparent 70%)",
-          filter: "blur(60px)",
-        }}
-      />
-      <div
-        className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full opacity-20"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(168,85,247,0.6) 0%, transparent 70%)",
-          filter: "blur(60px)",
-          animation: "float 8s ease-in-out infinite",
-        }}
-      />
-      <div
-        className="absolute top-3/4 left-1/2 w-64 h-64 rounded-full opacity-15"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(249,115,22,0.6) 0%, transparent 70%)",
-          filter: "blur(40px)",
-          animation: "float 6s ease-in-out infinite reverse",
-        }}
-      />
+      {/* Video Background — place your file at: client/public/bg-video.mp4 */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover"
+      >
+        <source src="/bg-video.mp4" type="video/mp4" />
+      </video>
+
+      {/* Dark Overlay for readability */}
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
 
       {/* Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60" />
