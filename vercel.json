@@ -1,9 +1,9 @@
 {
-  "buildCommand": "pnpm run build",
+  "buildCommand": "npm run build",
   "outputDirectory": "dist/public",
-  "installCommand": "pnpm install",
+  "installCommand": "npm install",
   "framework": null,
-  "regions": ["sfo1"],
+  "regions": ["iad1"],
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ]
