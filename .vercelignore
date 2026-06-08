@@ -1,0 +1,37 @@
+# Development files
+.env.local
+.env.*.local
+.git
+.gitignore
+.prettierignore
+.prettierrc
+.manus-logs
+.project-config.json
+
+# Documentation
+*.md
+VERCEL_DEPLOYMENT_GUIDE.md
+DEPLOYMENT_COMPLETE_GUIDE.md
+
+# Dependencies
+node_modules
+pnpm-lock.yaml
+yarn.lock
+
+# Build artifacts (keep dist)
+.vite
+dist/index.js
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage
+.vitest
