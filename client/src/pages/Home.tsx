@@ -130,9 +130,6 @@ export default function Home() {
         <source src="/bg-video.mp4" type="video/mp4" />
       </video>
 
-      {/* Dark Overlay for readability */}
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
-
 
 
       {/* Language Toggle */}
