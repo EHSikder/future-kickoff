@@ -184,6 +184,27 @@ export default function Home() {
             {t.subtitle}
           </p>
 
+          {/* FIFA label */}
+          <div className="flex flex-col items-center gap-1.5">
+            <div className="flex items-center gap-3">
+              <div className="h-px w-10 bg-gradient-to-r from-transparent to-yellow-500/35" />
+              <span
+                className="text-[11px] font-black tracking-[0.28em] uppercase"
+                style={{ color: "rgba(251,191,36,0.72)" }}
+              >
+                FIFA World Cup 2026
+              </span>
+              <div className="h-px w-10 bg-gradient-to-l from-transparent to-yellow-500/35" />
+            </div>
+            <div className="flex items-center gap-2.5">
+              <span className="text-[9px] font-bold tracking-[0.2em] text-slate-500 uppercase">USA</span>
+              <span className="text-slate-700 text-[8px]">·</span>
+              <span className="text-[9px] font-bold tracking-[0.2em] text-slate-500 uppercase">Canada</span>
+              <span className="text-slate-700 text-[8px]">·</span>
+              <span className="text-[9px] font-bold tracking-[0.2em] text-slate-500 uppercase">Mexico</span>
+            </div>
+          </div>
+
           {/* Countdown Timer — single digital box */}
           <div className="pt-8 pb-4 flex justify-center">
             <div className="relative">
