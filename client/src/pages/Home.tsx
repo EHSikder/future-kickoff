@@ -184,62 +184,104 @@ export default function Home() {
             {t.subtitle}
           </p>
 
-          {/* Countdown Timer */}
-          <div className="pt-8 pb-4">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-              {[
-                { value: countdown.days, label: t.days, color: "blue" },
-                { value: countdown.hours, label: t.hours, color: "purple" },
-                { value: countdown.minutes, label: t.minutes, color: "orange" },
-                { value: countdown.seconds, label: t.seconds, color: "blue" },
-              ].map(({ value, label, color }) => (
-                <div key={label} className="group">
-                  <div className="relative">
-                    <div
-                      className={`absolute inset-0 rounded-lg blur-xl group-hover:blur-2xl transition-all duration-300`}
-                      style={{
-                        background:
-                          color === "blue"
-                            ? "linear-gradient(to right, rgba(59,130,246,0.2), rgba(168,85,247,0.2))"
-                            : color === "purple"
-                            ? "linear-gradient(to right, rgba(168,85,247,0.2), rgba(59,130,246,0.2))"
-                            : "linear-gradient(to right, rgba(249,115,22,0.2), rgba(168,85,247,0.2))",
-                      }}
-                    />
-                    <div
-                      className="relative backdrop-blur-md rounded-lg p-6 md:p-8 transition-all duration-300"
-                      style={{
-                        background:
-                          "linear-gradient(135deg, rgba(15,23,42,0.8), rgba(30,41,59,0.8))",
-                        border: `1px solid ${
-                          color === "blue"
-                            ? "rgba(59,130,246,0.3)"
-                            : color === "purple"
-                            ? "rgba(168,85,247,0.3)"
-                            : "rgba(249,115,22,0.3)"
-                        }`,
-                      }}
-                    >
-                      <div
-                        className={`text-4xl md:text-5xl font-black drop-shadow-lg`}
-                        style={{
-                          color:
-                            color === "blue"
-                              ? "#93c5fd"
-                              : color === "purple"
-                              ? "#d8b4fe"
-                              : "#fdba74",
-                        }}
-                      >
-                        {String(value).padStart(2, "0")}
-                      </div>
-                      <div className="text-xs md:text-sm font-semibold text-slate-400 uppercase tracking-widest mt-2">
-                        {label}
-                      </div>
-                    </div>
-                  </div>
+          {/* Countdown Timer — single digital box */}
+          <div className="pt-8 pb-4 flex justify-center">
+            <div className="relative">
+              {/* Ambient glow */}
+              <div
+                className="absolute inset-0 rounded-2xl blur-2xl"
+                style={{
+                  background:
+                    "linear-gradient(to right, rgba(59,130,246,0.35), rgba(168,85,247,0.35), rgba(249,115,22,0.35))",
+                }}
+              />
+              {/* Timer box */}
+              <div
+                className="relative backdrop-blur-md rounded-2xl px-6 md:px-10 py-6 md:py-8 flex items-center gap-1 md:gap-2"
+                style={{
+                  background:
+                    "linear-gradient(135deg, rgba(10,18,40,0.92), rgba(22,36,56,0.92))",
+                  border: "1px solid rgba(99,160,255,0.35)",
+                  boxShadow:
+                    "0 0 40px rgba(59,130,246,0.15), inset 0 1px 0 rgba(255,255,255,0.05)",
+                }}
+              >
+                {/* Days */}
+                <div className="flex flex-col items-center min-w-[3ch]">
+                  <span
+                    className="text-4xl md:text-6xl font-black tabular-nums leading-none"
+                    style={{ color: "#93c5fd", fontFamily: "'Courier New', monospace", textShadow: "0 0 18px rgba(147,197,253,0.6)" }}
+                  >
+                    {String(countdown.days).padStart(2, "0")}
+                  </span>
+                  <span className="text-[10px] md:text-xs font-semibold text-slate-400 uppercase tracking-widest mt-1.5">
+                    {t.days}
+                  </span>
                 </div>
-              ))}
+
+                {/* Separator */}
+                <span
+                  className="text-3xl md:text-5xl font-black pb-5 select-none"
+                  style={{ color: "rgba(147,197,253,0.5)" }}
+                >
+                  :
+                </span>
+
+                {/* Hours */}
+                <div className="flex flex-col items-center min-w-[3ch]">
+                  <span
+                    className="text-4xl md:text-6xl font-black tabular-nums leading-none"
+                    style={{ color: "#d8b4fe", fontFamily: "'Courier New', monospace", textShadow: "0 0 18px rgba(216,180,254,0.6)" }}
+                  >
+                    {String(countdown.hours).padStart(2, "0")}
+                  </span>
+                  <span className="text-[10px] md:text-xs font-semibold text-slate-400 uppercase tracking-widest mt-1.5">
+                    {t.hours}
+                  </span>
+                </div>
+
+                {/* Separator */}
+                <span
+                  className="text-3xl md:text-5xl font-black pb-5 select-none"
+                  style={{ color: "rgba(216,180,254,0.5)" }}
+                >
+                  :
+                </span>
+
+                {/* Minutes */}
+                <div className="flex flex-col items-center min-w-[3ch]">
+                  <span
+                    className="text-4xl md:text-6xl font-black tabular-nums leading-none"
+                    style={{ color: "#fdba74", fontFamily: "'Courier New', monospace", textShadow: "0 0 18px rgba(253,186,116,0.6)" }}
+                  >
+                    {String(countdown.minutes).padStart(2, "0")}
+                  </span>
+                  <span className="text-[10px] md:text-xs font-semibold text-slate-400 uppercase tracking-widest mt-1.5">
+                    {t.minutes}
+                  </span>
+                </div>
+
+                {/* Separator */}
+                <span
+                  className="text-3xl md:text-5xl font-black pb-5 select-none"
+                  style={{ color: "rgba(253,186,116,0.5)" }}
+                >
+                  :
+                </span>
+
+                {/* Seconds */}
+                <div className="flex flex-col items-center min-w-[3ch]">
+                  <span
+                    className="text-4xl md:text-6xl font-black tabular-nums leading-none"
+                    style={{ color: "#93c5fd", fontFamily: "'Courier New', monospace", textShadow: "0 0 18px rgba(147,197,253,0.6)" }}
+                  >
+                    {String(countdown.seconds).padStart(2, "0")}
+                  </span>
+                  <span className="text-[10px] md:text-xs font-semibold text-slate-400 uppercase tracking-widest mt-1.5">
+                    {t.seconds}
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
 
