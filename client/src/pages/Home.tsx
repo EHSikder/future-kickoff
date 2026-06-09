@@ -168,8 +168,7 @@ export default function Home() {
             <Zap className="w-5 h-5 text-purple-400 animate-pulse" />
           </div>
 
-          {/* Main Heading */}
-          <div className="space-y-4">
+          {/* Main Heading */}          
             <div className="space-y-1">
   <h1
     className="text-5xl md:text-7xl font-black tracking-tighter leading-none bg-gradient-to-r from-blue-400 via-purple-400 to-orange-400 bg-clip-text text-transparent drop-shadow-lg"
