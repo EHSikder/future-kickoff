@@ -170,7 +170,7 @@ export default function Home() {
 
           {/* Main Heading */}          
             <div className="space-y-4">
-  <h1 className="text-5xl md:text-7xl font-black tracking-tighter leading-tight">
+  <h1 className="text-3xl md:text-5xl font-black tracking-tighter leading-tight">
   <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-orange-400 bg-clip-text text-transparent drop-shadow-lg">
     {t.heading1}
   </span>
