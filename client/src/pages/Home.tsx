@@ -169,20 +169,14 @@ export default function Home() {
           </div>
 
           {/* Main Heading */}          
-            <div className="space-y-1">
-  <h1
-    className="text-5xl md:text-7xl font-black tracking-tighter leading-none bg-gradient-to-r from-blue-400 via-purple-400 to-orange-400 bg-clip-text text-transparent drop-shadow-lg"
-    style={{ fontFamily: "Bebas Neue" }}
-  >
+            <div className="space-y-4">
+  <h1 className="text-5xl md:text-7xl font-black tracking-tighter leading-tight">
+  <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-orange-400 bg-clip-text text-transparent drop-shadow-lg">
     {t.heading1}
-  </h1>
-
-  <h2
-    className="text-3xl md:text-5xl font-black tracking-tighter leading-none text-white drop-shadow-lg"
-    style={{ fontFamily: "Bebas Neue" }}
-  >
-    {t.heading2}
-  </h2>
+  </span>
+  <br />
+  <span className="text-white drop-shadow-lg">{t.heading2}</span>
+</h1>
 </div>
 
           {/* Subtitle */}
