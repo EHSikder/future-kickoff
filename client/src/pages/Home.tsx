@@ -8,6 +8,8 @@ import { Zap, Bell } from "lucide-react";
  * - Premium, cinematic presentation
  * - Minimalist layout with maximum impact
  * - Bilingual support: English & Arabic
+ * 
+ * COUNTDOWN: 1 hour 35 minutes from deployment (95 minutes total)
  */
 
 interface CountdownState {
@@ -25,7 +27,7 @@ const translations = {
     heading1: "The Future is Closer",
     heading2: "Than You Think",
     subtitle:
-      "Fifa world cup 2026 is almost here. Get ready to predict and win. Stay Tuned",
+      "FIFA World Cup 2026 is almost here. Get ready to predict the matches of the most anticipated tournament of the decade.",
     days: "Days",
     hours: "Hours",
     minutes: "Minutes",
@@ -39,7 +41,7 @@ const translations = {
     heading1: "المستقبل أقرب",
     heading2: "مما تعتقد",
     subtitle:
-      "كأس العالم لكرة القدم 2026 على الأبواب. استعدوا للتوقع والفوز. تابعونا!",
+      "كأس العالم FIFA 2026 على الأبواب. استعد للتنبؤ بمباريات أكثر البطولات توقعاً في العقد.",
     days: "أيام",
     hours: "ساعات",
     minutes: "دقائق",
@@ -61,23 +63,38 @@ export default function Home() {
   const [language, setLanguage] = useState<Language>("en");
   const [isSpinning, setIsSpinning] = useState(false);
   const [notified, setNotified] = useState(false);
+  const [deploymentTime] = useState<number>(() => {
+    // Get deployment time from localStorage or current time
+    const stored = localStorage.getItem("deploymentTime");
+    if (stored) {
+      return parseInt(stored, 10);
+    }
+    // First load: store current time as deployment time
+    const now = Date.now();
+    localStorage.setItem("deploymentTime", now.toString());
+    return now;
+  });
 
   const t = translations[language];
 
   useEffect(() => {
     const calculateCountdown = () => {
-      const targetDate = new Date("2026-06-12T00:00:00").getTime();
-      const now = new Date().getTime();
-      const difference = targetDate - now;
+      // 1 hour 35 minutes = 95 minutes = 5700 seconds = 5,700,000 milliseconds
+      const COUNTDOWN_DURATION = 95 * 60 * 1000; // 1 hour 35 minutes in milliseconds
+      
+      const now = Date.now();
+      const elapsedTime = now - deploymentTime;
+      const remainingTime = COUNTDOWN_DURATION - elapsedTime;
 
-      if (difference > 0) {
+      if (remainingTime > 0) {
         setCountdown({
-          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-          minutes: Math.floor((difference / 1000 / 60) % 60),
-          seconds: Math.floor((difference / 1000) % 60),
+          days: Math.floor(remainingTime / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((remainingTime / (1000 * 60 * 60)) % 24),
+          minutes: Math.floor((remainingTime / 1000 / 60) % 60),
+          seconds: Math.floor((remainingTime / 1000) % 60),
         });
       } else {
+        // Countdown finished
         setCountdown({ days: 0, hours: 0, minutes: 0, seconds: 0 });
       }
     };
@@ -85,7 +102,7 @@ export default function Home() {
     calculateCountdown();
     const interval = setInterval(calculateCountdown, 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [deploymentTime]);
 
   const handleNotificationClick = () => {
     setIsSpinning(true);
@@ -119,7 +136,7 @@ export default function Home() {
         language === "ar" ? "rtl" : "ltr"
       }`}
     >
-      {/* Video Background — place your file at: client/public/bg-video.mp4 */}
+      {/* Video Background */}
       <video
         autoPlay
         muted
@@ -127,12 +144,16 @@ export default function Home() {
         playsInline
         className="absolute inset-0 w-full h-full object-cover"
       >
-        <source src="/bg-video.mp4" type="video/mp4" />
+        <source src="/manus-storage/worldcup-bg-video_8b15b371.mp4" type="video/mp4" />
       </video>
 
+      {/* Dark Overlay for better text readability */}
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
 
+      {/* Gradient Overlay - adds depth and premium feel */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60" />
 
-      {/* Language Toggle */}
+      {/* Language Toggle - Top Right */}
       <div className="absolute top-6 right-6 z-20 flex gap-2">
         <button
           onClick={() => setLanguage("en")}
@@ -159,7 +180,7 @@ export default function Home() {
       {/* Content Container */}
       <div className="relative z-10 min-h-screen w-full flex flex-col items-center justify-center px-4 py-8">
         <div className="max-w-4xl mx-auto text-center space-y-8">
-          {/* Tagline */}
+          {/* Tagline with Icon */}
           <div className="flex items-center justify-center gap-3 mb-6">
             <Zap className="w-5 h-5 text-blue-400 animate-pulse" />
             <span className="text-sm font-semibold tracking-widest text-blue-300 uppercase">
@@ -168,44 +189,23 @@ export default function Home() {
             <Zap className="w-5 h-5 text-purple-400 animate-pulse" />
           </div>
 
-          {/* Main Heading */}          
-            <div className="space-y-4">
-  <h1 className="text-3xl md:text-5xl font-black tracking-tighter leading-tight">
-  <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-orange-400 bg-clip-text text-transparent drop-shadow-lg">
-    {t.heading1}
-  </span>
-  <br />
-  <span className="text-white drop-shadow-lg">{t.heading2}</span>
-</h1>
-</div>
+          {/* Main Heading */}
+          <div className="space-y-4">
+            <h1 className="text-5xl md:text-7xl font-black tracking-tighter leading-tight">
+              <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-orange-400 bg-clip-text text-transparent drop-shadow-lg">
+                {t.heading1}
+              </span>
+              <br />
+              <span className="text-white drop-shadow-lg">{t.heading2}</span>
+            </h1>
+          </div>
 
           {/* Subtitle */}
           <p className="text-lg md:text-xl text-gray-200 font-light tracking-wide max-w-2xl mx-auto leading-relaxed">
             {t.subtitle}
           </p>
 
-          {/* FIFA label */}
-          <div className="flex flex-col items-center gap-1.5">
-            <div className="flex items-center gap-3">
-              <div className="h-px w-10 bg-gradient-to-r from-transparent to-yellow-500/35" />
-              <span
-                className="text-[11px] font-black tracking-[0.28em] uppercase"
-                style={{ color: "rgba(251,191,36,0.72)" }}
-              >
-                FIFA World Cup 2026
-              </span>
-              <div className="h-px w-10 bg-gradient-to-l from-transparent to-yellow-500/35" />
-            </div>
-            <div className="flex items-center gap-2.5">
-              <span className="text-[9px] font-bold tracking-[0.2em] text-slate-500 uppercase">USA</span>
-              <span className="text-slate-700 text-[8px]">·</span>
-              <span className="text-[9px] font-bold tracking-[0.2em] text-slate-500 uppercase">Canada</span>
-              <span className="text-slate-700 text-[8px]">·</span>
-              <span className="text-[9px] font-bold tracking-[0.2em] text-slate-500 uppercase">Mexico</span>
-            </div>
-          </div>
-
-          {/* Countdown Timer — single digital box */}
+          {/* Countdown Timer */}
           <div className="pt-8 pb-4 flex justify-center">
             <div className="relative">
               {/* Ambient glow */}
