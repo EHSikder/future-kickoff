@@ -80,7 +80,7 @@ export default function Home() {
   useEffect(() => {
     const calculateCountdown = () => {
       // 1 hour 35 minutes = 95 minutes = 5700 seconds = 5,700,000 milliseconds
-      const COUNTDOWN_DURATION = 95 * 60 * 1000; // 1 hour 35 minutes in milliseconds
+      const COUNTDOWN_DURATION = 98 * 60 * 1000; // 1 hour 35 minutes in milliseconds
       
       const now = Date.now();
       const elapsedTime = now - deploymentTime;
